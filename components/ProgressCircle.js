@@ -4,10 +4,9 @@ import { ProgressChart } from 'react-native-chart-kit';
 
 const screenWidth = Dimensions.get('window').width;
 
-const ProgressCircle = () => {
-  const progressValue = 0.7; // 70% de progression
+const ProgressCircle = ({ progress }) => {
   const data = {
-    data: [progressValue],
+    data: [progress],
   };
 
   const chartConfig = {
@@ -15,7 +14,7 @@ const ProgressCircle = () => {
     backgroundGradientFromOpacity: 0,
     backgroundGradientTo: "#fff",
     backgroundGradientToOpacity: 0,
-    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+    color: (opacity = 1) => `rgba(0, 60, 87, ${opacity})`,
     strokeWidth: 8, 
     barPercentage: 0.5,
     useShadowColorFromDataset: false, 
@@ -35,7 +34,7 @@ const ProgressCircle = () => {
         />
         <View style={styles.textView}>
           <Text style={styles.text}>
-            {`${Math.round(progressValue * 100)}%`}
+          {`${Math.round(progress * 100)}%`}
           </Text>
         </View>
       </View>
