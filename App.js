@@ -90,13 +90,39 @@ const App = () => {
 
   const handleResetProgress = () => {
     const currentDate = new Date().toDateString();
+  
+    // Filter out today's entry from consumption history
     const updatedHistory = consumptionHistory.filter(entry => entry.date !== currentDate);
-    setConsumptionHistory(updatedHistory);
+  
+    // Reset water intake for today
     setWaterIntake(0);
-    setWeeklyProgress(0);
-    setMonthlyProgress(0);
+  
+    // Recalculate progress based on updated history
+    setWeeklyProgress(calculateWeeklyProgress(updatedHistory));
+    setMonthlyProgress(calculateMonthlyProgress(updatedHistory));
     setGoalCompletionRate(calculateGoalCompletionRate(updatedHistory, goal));
   };
+  
+  const calculateWeeklyProgress = (history) => {
+  const currentDate = new Date();
+  const pastWeekDates = Array.from({ length: 7 }, (_, i) => new Date(currentDate - i * 24 * 60 * 60 * 1000).toDateString());
+
+  const weeklyIntake = history.filter(entry => pastWeekDates.includes(entry.date))
+    .reduce((sum, entry) => sum + entry.intake, 0);
+
+  return weeklyIntake / (goal * 7);
+};
+
+const calculateMonthlyProgress = (history) => {
+  const currentDate = new Date();
+  const pastMonthDates = Array.from({ length: 30 }, (_, i) => new Date(currentDate - i * 24 * 60 * 60 * 1000).toDateString());
+
+  const monthlyIntake = history.filter(entry => pastMonthDates.includes(entry.date))
+    .reduce((sum, entry) => sum + entry.intake, 0);
+
+  return monthlyIntake / (goal * 30);
+};
+
 
   const goalCompletion = Math.min(waterIntake / goal, 1);
 

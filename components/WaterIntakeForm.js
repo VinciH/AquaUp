@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, Image, StyleSheet } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, Image, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 const WaterIntakeForm = ({ onAddIntake, isGoalReached }) => {
   const [mlInput, setMlInput] = useState('');
   const [glassInput, setGlassInput] = useState('');
+  const [focused, setFocused] = useState(false);
 
   const handleAddMlIntake = () => {
     if (mlInput) {
@@ -19,58 +20,74 @@ const WaterIntakeForm = ({ onAddIntake, isGoalReached }) => {
     }
   };
 
+  const handleOutsidePress = () => {
+    setFocused(false);
+    Keyboard.dismiss(); // Dismiss the keyboard when clicking outside
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={[styles.input, isGoalReached && styles.disabledInput]}
-          placeholder="water"
-          keyboardType="numeric"
-          value={mlInput}
-          onChangeText={setMlInput}
-          editable={!isGoalReached}
-        />
-        <Text>ml</Text>
-        <TouchableOpacity
-          style={[styles.addButton, isGoalReached && styles.disabledButton]}
-          onPress={handleAddMlIntake}
-          disabled={isGoalReached}
-        >
-          <Image source={require('../assets/plus.png')} style={styles.icon} />
-        </TouchableOpacity>
+    <TouchableWithoutFeedback onPress={handleOutsidePress}>
+      <View style={styles.container}>
+        <View style={[styles.inputContainer, focused && styles.focusedContainer]}>
+          <TextInput
+            style={[styles.input, isGoalReached && styles.disabledInput]}
+            placeholder="water"
+            keyboardType="numeric"
+            value={mlInput}
+            onChangeText={setMlInput}
+            onFocus={() => setFocused(true)}
+            editable={!isGoalReached}
+          />
+          <Text>ml</Text>
+          <TouchableOpacity
+            style={[styles.addButton, isGoalReached && styles.disabledButton]}
+            onPress={handleAddMlIntake}
+            disabled={isGoalReached}
+          >
+            <Image source={require('../assets/plus.png')} style={styles.icon} />
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.inputContainer, focused && styles.focusedContainer]}>
+          <TextInput
+            style={[styles.input, isGoalReached && styles.disabledInput]}
+            placeholder="cup"
+            keyboardType="numeric"
+            value={glassInput}
+            onChangeText={setGlassInput}
+            onFocus={() => setFocused(true)}
+            editable={!isGoalReached}
+          />
+          <Image source={require('../assets/verre-deau.png')} style={styles.verre} />
+          <TouchableOpacity
+            style={[styles.addButton, isGoalReached && styles.disabledButton]}
+            onPress={handleAddGlassIntake}
+            disabled={isGoalReached}
+          >
+            <Image source={require('../assets/plus.png')} style={styles.icon} />
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={[styles.input, isGoalReached && styles.disabledInput]}
-          placeholder="cup"
-          keyboardType="numeric"
-          value={glassInput}
-          onChangeText={setGlassInput}
-          editable={!isGoalReached}
-        />
-        <Image source={require('../assets/verre-deau.png')} style={styles.verre} />
-        <TouchableOpacity
-          style={[styles.addButton, isGoalReached && styles.disabledButton]}
-          onPress={handleAddGlassIntake}
-          disabled={isGoalReached}
-        >
-          <Image source={require('../assets/plus.png')} style={styles.icon} />
-        </TouchableOpacity>
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    top: -90,
+    top: -120,
+    width: '100%',
+    alignItems: 'center',
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
     width: 250,
+  },
+  focusedContainer: {
+    backgroundColor: '#e0f7fa',
+    padding: 10,
+    borderRadius: 5,
   },
   input: {
     flex: 1,
