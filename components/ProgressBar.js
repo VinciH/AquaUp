@@ -19,8 +19,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     position: 'relative',
-    paddingLeft:5,
-    top:-40,
+    paddingLeft:15,
+    top:-50,
   },
   label: {
     alignItems: '',
