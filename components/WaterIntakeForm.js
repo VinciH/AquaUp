@@ -74,7 +74,7 @@ const WaterIntakeForm = ({ onAddIntake, isGoalReached }) => {
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    top: -120,
+    top: -90,
     width: '100%',
     alignItems: 'center',
   },
@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     backgroundColor: '#e0e0e0',
+    borderRadius:50,
   },
 });
 
